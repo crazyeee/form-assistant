@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Filling Assistant</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        button { margin: 5px; padding: 5px 10px; }
+        #message { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Form Filling Assistant</h1>
+    <div>
+        <p>Name: <span id="name">Mehran</span> <button onclick="copyToClipboard('name')">Copy Name</button></p>
+        <p>Phone: <span id="phone"></span> <button onclick="copyToClipboard('phone')">Copy Phone</button> <button onclick="refreshPhone()">Refresh Phone</button></p>
+        <p>City: Select the first city in the dropdown</p>
+        <p>Unique ID: <span id="uniqueId"></span> <button onclick="copyToClipboard('uniqueId')">Copy ID</button> <button onclick="refreshUniqueId()">Refresh ID</button></p>
+        <p>Remember to check:</p>
+        <ul>
+            <li>Terms and Conditions</li>
+            <li>Consent</li>
+        </ul>
+    </div>
+    <button onclick="copyAll()">Copy All</button>
+    <button onclick="refreshAll()">Refresh All</button>
+    <div id="message"></div>
+
+    <script>
+        function generateRandomNumber(length) {
+            return Array.from({length}, () => Math.floor(Math.random() * 10)).join('');
+        }
+
+        function refreshPhone() {
+            document.getElementById('phone').textContent = '038' + generateRandomNumber(8);
+            showMessage('Phone refreshed!');
+        }
+
+        function refreshUniqueId() {
+            document.getElementById('uniqueId').textContent = generateRandomNumber(8);
+            showMessage('Unique ID refreshed!');
+        }
+
+        function refreshAll() {
+            refreshPhone();
+            refreshUniqueId();
+            showMessage('All information refreshed!');
+        }
+
+        function copyToClipboard(id) {
+            const text = document.getElementById(id).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage(`${id.charAt(0).toUpperCase() + id.slice(1)} copied!`);
+            });
+        }
+
+        function copyAll() {
+            const name = document.getElementById('name').textContent;
+            const phone = document.getElementById('phone').textContent;
+            const uniqueId = document.getElementById('uniqueId').textContent;
+            const allInfo = `Name: ${name}\nPhone: ${phone}\nUnique ID: ${uniqueId}`;
+            navigator.clipboard.writeText(allInfo).then(() => {
+                showMessage('All information copied!');
+            });
+        }
+
+        function showMessage(msg) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = msg;
+            setTimeout(() => { messageElement.textContent = ''; }, 2000);
+        }
+
+        // Initialize random fields
+        refreshAll();
+    </script>
+</body>
+</html>
